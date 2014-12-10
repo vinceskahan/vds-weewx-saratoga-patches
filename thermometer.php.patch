@@ -1,0 +1,68 @@
+diff --git a/thermometer.php b/thermometer.php
+index 2d13bf6..5ac8174 100644
+--- a/thermometer.php
++++ b/thermometer.php
+@@ -33,6 +33,8 @@ if (isset($_REQUEST['sce']) && strtolower($_REQUEST['sce']) == 'view' ) {
+ // Version 1.13 - 20-Jul-2014 - updated for WeatherSnoop V3 via WSNtags/WSN-defs
+ // Version 1.14 - 26-Jul-2014 - corrected Notice: error in script after WeatherSnoop addition
+ //
++// (patched for weewx-wd - add 'WE' as a special case using WD data and formatting)
++//
+ // script available at http://saratoga-weather.org/scripts.php
+ //  
+ // you may copy/modify/use this script as you see fit,
+@@ -50,8 +52,9 @@ if (isset($_REQUEST['sce']) && strtolower($_REQUEST['sce']) == 'view' ) {
+ // add majortick values to maximum or substract majortick values from minimum to always show the
+ // scale, current, minimum, maximum on the graphic.
+ //------------ settings ------------------
+-$wxSoftware         = 'WD';                           // 'WD' for Weather-Display, 'VWS' for Virtual Weather Station,
++$wxSoftware         = 'WE';                           // 'WD' for Weather-Display, 'VWS' for Virtual Weather Station,
+                                                       // 'CU' for Cumulus, 'WL' for WeatherLink, 'WXS' for WXSolution
++                                                      // 'WE' for Weewx
+ //
+ $UOM = 'F';                                           // set to 'C' for Celsius/Centigrade, 'F'=Fahrenheit
+ //
+@@ -59,10 +62,11 @@ $autoScale = true;                                    // set to false to disable
+ //
+ // you only have to set one of these correctly based on the $useWD selection
+ // $wxSoftware = 'WD' : set the $clientrawfile
++// $wxSoftware = 'WE' : set the $clientrawfile
+ // $wxSoftware = 'VWS': set the $wflashDir
+ // $wxSoftware = 'CU': set the $realtimefile
+ //
+-$clientrawfile = './clientraw.txt';                // relative file address for WD clientraw.txt
++$clientrawfile = '../WD/clientraw.txt';                // relative file address for WD clientraw.txt
+ $wflashDir     = './wflash/Data/';                 // directory for the the VWS wflash.txt and wflash2.txt files
+ //                                                 // relative to directory location of this script (include
+ //                                                 // trailing '/' in the specification
+@@ -100,6 +104,7 @@ if (isset($SITE['WLrealtime']) ) {$WLrealtime = $SITE['WLrealtime']; }
+ if (isset($SITE['WCTrealtime']) ) {$WCTrealtime = $SITE['WCTrealtime']; }
+ if (isset($SITE['WXSrealtime']) ) {$WXSrealtime = $SITE['WXSrealtime']; }
+ if (isset($SITE['WVrealtime']) ) {$WVrealtime = $SITE['WVrealtime']; }
++if (isset($SITE['WErealtime']) ) {$WErealtime = $SITE['WErealtime']; }
+ if (isset($SITE['WXsoftware']) ) {$wxSoftware = $SITE['WXsoftware']; }
+ 
+ $CSSstyle = '';
+@@ -131,13 +136,14 @@ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wsn') { $wxSoftwa
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wct') { $wxSoftware = 'WCT'; } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wxs') { $wxSoftware = 'WXS'; } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wv')  { $wxSoftware = 'WV';  } // testing
++if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'we')  { $wxSoftware = 'WE';  } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'mb')  { $wxSoftware = 'MB';  } // testing
+ 
+ if (isset($_REQUEST['uom']) and strtolower($_REQUEST['uom']) == 'c') { $UOM = 'C'; }
+ if (isset($_REQUEST['uom']) and strtolower($_REQUEST['uom']) == 'f') { $UOM = 'F'; }
+ if (isset($_REQUEST['dark'])) {$invertColor = strtolower($_REQUEST['dark'])=='y'; }
+ 
+-if ($wxSoftware == 'WD' or $wxSoftware == 'MH') { // Get the Weather-Display/Meteohub clientraw.txt data file
++if ($wxSoftware == 'WD' or $wxSoftware == 'MH' or $wxSoftware == 'WE') { // Get the Weather-Display/Meteohub clientraw.txt data file
+ 
+       $dataraw = file_get_contents($clientrawfile);
+ 
+@@ -800,4 +806,4 @@ function autoscale($curtemp,$mintemp,$maxtemp) {
+ 
+ 
+ }
+-?>
+\ No newline at end of file
++?>

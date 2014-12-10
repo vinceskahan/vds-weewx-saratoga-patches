@@ -1,0 +1,28 @@
+diff --git a/flyout-menu.xml b/flyout-menu.xml
+index 814a77f..ff1ceab 100644
+--- a/flyout-menu.xml
++++ b/flyout-menu.xml
+@@ -47,12 +47,14 @@
+ 	<item caption="Forecast &amp;amp; Advisories" title="Weather outlook">
+ 		<item caption="Forecast details" link="wxforecast.php"/>
+ 		<item caption="Advisories" link="wxadvisory.php" />
++<!-- this should be conditional based on the setting in Settings.php
+ 		<item caption="WXSIM Forecast details" link="wxsimforecast.php"/>
++-->
+ 		<item caption="UV Index Forecast" link="wxuvforecast.php"/>
+ 	</item>
+ 	<item caption="Almanac" title="Trends, Sun/Moon, Earthquakes">
+-	    	<item wxonly="WD,MB,MH,CU" caption="Weather Trends" link="wxtrends.php"/>
+-		<item wxonly="WD,VWS,WL,CU,MH,WCT,WV" caption="Station Graphs" link="wxgraphs.php"/>
++	    	<item wxonly="WD,MB,MH,CU,WE" caption="Weather Trends" link="wxtrends.php"/>
++		<item wxonly="WD,VWS,WL,CU,MH,WCT,WV,WE" caption="Station Graphs" link="wxgraphs.php"/>
+ 		<item wxonly="WCT" caption="Station Records" link="wxstationrecords.php"/>
+ 		<item wxonly="WCT" caption="Station Journal" link="wxjournal.php"/>
+ 		<item wxonly="WCT" caption="Recent Weather Summary" link="wxrecent.php"/>
+@@ -74,4 +76,4 @@
+ 	<item caption="Contact" link="wxcontact.php"/>
+  -->
+     <item caption="Website Map" link="wxsitemap.php"/>
+-</menu>
+\ No newline at end of file
++</menu>

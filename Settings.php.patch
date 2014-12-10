@@ -1,0 +1,20 @@
+diff --git a/Settings.php b/Settings.php
+index 12689e6..9f8288a 100644
+--- a/Settings.php
++++ b/Settings.php
+@@ -157,7 +157,7 @@ $SITE['UVscript']		= 'get-UV-forecast-inc.php'; // worldwide forecast script for
+ //	comment out above line to exclude UV forecast from dashboard, gizmo and wxuvforecast.php page
+ //
+ // if you have WXSIM installed set $SITE['WXSIM'] = true; otherwise set it to false
+-$SITE['WXSIM']			= true;  // Set to false if you have not installed WXSIM
++$SITE['WXSIM']			= false;  // Set to false if you have not installed WXSIM
+ $SITE['WXSIMscript'] 	= 'plaintext-parser.php'; // script for decoding plaintext.txt into icons
+ $SITE['defaultlang']	= 'en';   // 'en' for English (WXSIM plaintext-parser.php)
+ 
+@@ -368,4 +368,4 @@ if(isset($_REQUEST['wx']) and file_exists('Settings-weather-'.strtoupper($_REQUE
+ } elseif(file_exists("Settings-weather.php")) { 
+     include_once("Settings-weather.php"); 
+ }
+-?>
+\ No newline at end of file
++?>

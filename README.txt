@@ -1,5 +1,5 @@
 
-This is a patch to the Saratoga Base-USA.zip tree to add
+This are patches to the Saratoga Base-USA.zip tree to add
 a new 'WE' (weewx) software type.
 
 It assumes that you are running:
@@ -15,7 +15,10 @@ Basic procedure to install is just like any other Saratoga
 installation, just with this patching step inserted.
 
  - extract Base-USA.zip
- - patch it using this patch
+ - apply each of these patches individually (for now)
+      with something like:
+          cd saratoga
+          patch < filename_here
  - extract my WE plugin
  - extract your desired icon set
  - edit your configurable information as needed
