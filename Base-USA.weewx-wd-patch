@@ -1,0 +1,318 @@
+diff --git a/README-weewx-wd-modifications b/README-weewx-wd-modifications
+new file mode 100644
+index 0000000..a4ce853
+--- /dev/null
++++ b/README-weewx-wd-modifications
+@@ -0,0 +1,11 @@
++This is Base-USA.zip modified for weewx-wd support
++
++- in short, it adds a 'WE' software type for weewx
++   and edits as needed to match weewx filenames
++   (in general, the image names)
++
++- use this with the saratoga 'WD' plugin
++
++This requires weewx v3 or later and a matching 
++weewx-wd extension.
++
+diff --git a/check-fetch-times.php b/check-fetch-times.php
+index 7c5e21b..2f7817d 100644
+--- a/check-fetch-times.php
++++ b/check-fetch-times.php
+@@ -171,6 +171,7 @@ if(isset($_REQUEST['show']) and strtolower($_REQUEST['show']) == 'info') {
+     'WL' => array('graphImageDir'=> 'OutsideTempHistory.gif','NOAACurDir'=>'NOAAMO.TXT'),
+ //	'WSN' => array('graphImageDir'=> '?????'),  // no graphs for WeatherSnoop
+ 	'WV'=> array('graphImageDir'=> 'tempdaycomp.png', 'NOAAdir'=> 'NOAA-yyyy.txt'),
++	'WE'=> array('graphImageDir'=> 'tempdaycomp.png', 'NOAAdir'=> 'NOAA-yyyy.txt'),
+ //	'WXS' => array('graphImageDir'=> '?????'),  // no graphs for WXSolution
+ 	
+   
+@@ -452,6 +453,8 @@ Base-Canada	wxtrends.php	2011-01-19 11:04 PST	2914	298	2842	ff4f1a25ebeb60a130b2
+ 	 'WSN' => array('WSNtags.php','WSN-defs.php'),
+ 	 'WV' => array('WV-defs.php','gen-WVtags.php','tags.txt',
+ 	  'include-NOAA-reports.php'),
++	 'WE' => array('WE-defs.php','gen-WEtags.php','tags.txt',
++	  'include-NOAA-reports.php'),
+ 	  
+ 	 'WXS' => array('WXS-defs.php','gen-WXStags.php','tags.txt'),
+ 	 
+@@ -1049,4 +1052,4 @@ function decode_permissions($perms) {
+ }
+ ?>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+diff --git a/flyout-menu.xml b/flyout-menu.xml
+index 814a77f..e1cb04e 100644
+--- a/flyout-menu.xml
++++ b/flyout-menu.xml
+@@ -52,14 +52,14 @@
+ 	</item>
+ 	<item caption="Almanac" title="Trends, Sun/Moon, Earthquakes">
+ 	    	<item wxonly="WD,MB,MH,CU" caption="Weather Trends" link="wxtrends.php"/>
+-		<item wxonly="WD,VWS,WL,CU,MH,WCT,WV" caption="Station Graphs" link="wxgraphs.php"/>
++		<item wxonly="WD,VWS,WL,CU,MH,WCT,WV,WE" caption="Station Graphs" link="wxgraphs.php"/>
+ 		<item wxonly="WCT" caption="Station Records" link="wxstationrecords.php"/>
+ 		<item wxonly="WCT" caption="Station Journal" link="wxjournal.php"/>
+ 		<item wxonly="WCT" caption="Recent Weather Summary" link="wxrecent.php"/>
+ 		<item wxonly="WCT" caption="Summary This Month" link="wxthismonth.php"/>
+ 		<item wxonly="WCT" caption="Summary Year over Year" link="wxyearoveryear.php"/>
+ 		<item wxonly="WD" caption="Station Monthly Reports" link="wxhistory.php"/>
+-		<item wxonly="CU,VWS,WL,WV" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
++		<item wxonly="CU,VWS,WL,WV,WE" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
+ 		<item caption="Sun/Moon Almanac" link="wxastronomy.php"/>
+ 		<item caption="Earthquake activity" link="wxquake.php"/>
+ 		<item caption="Nearby METAR Reports" link="wxmetar.php"/>
+@@ -74,4 +74,4 @@
+ 	<item caption="Contact" link="wxcontact.php"/>
+  -->
+     <item caption="Website Map" link="wxsitemap.php"/>
+-</menu>
+\ No newline at end of file
++</menu>
+diff --git a/thermometer.php b/thermometer.php
+index 2d13bf6..9c48709 100644
+--- a/thermometer.php
++++ b/thermometer.php
+@@ -100,6 +100,7 @@ if (isset($SITE['WLrealtime']) ) {$WLrealtime = $SITE['WLrealtime']; }
+ if (isset($SITE['WCTrealtime']) ) {$WCTrealtime = $SITE['WCTrealtime']; }
+ if (isset($SITE['WXSrealtime']) ) {$WXSrealtime = $SITE['WXSrealtime']; }
+ if (isset($SITE['WVrealtime']) ) {$WVrealtime = $SITE['WVrealtime']; }
++if (isset($SITE['WErealtime']) ) {$WErealtime = $SITE['WErealtime']; }
+ if (isset($SITE['WXsoftware']) ) {$wxSoftware = $SITE['WXsoftware']; }
+ 
+ $CSSstyle = '';
+@@ -131,6 +132,7 @@ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wsn') { $wxSoftwa
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wct') { $wxSoftware = 'WCT'; } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wxs') { $wxSoftware = 'WXS'; } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'wv')  { $wxSoftware = 'WV';  } // testing
++if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'we')  { $wxSoftware = 'WE';  } // testing
+ if (isset($_REQUEST['wx']) and strtolower($_REQUEST['wx']) == 'mb')  { $wxSoftware = 'MB';  } // testing
+ 
+ if (isset($_REQUEST['uom']) and strtolower($_REQUEST['uom']) == 'c') { $UOM = 'C'; }
+@@ -539,6 +541,71 @@ if ($wxSoftware == 'WV') { // Process wview
+ 
+ } // end wview processing
+ 
++if ($wxSoftware == 'WE') { // Process weewx
++  if(!isset($WErealtime)) { // get from WEtags.php
++
++	   if (file_exists($SITE['WXtags'])) {
++		   global $WX;
++		   include_once($SITE['WXtags']);
++	   }
++	   $inUOM = 'F';
++	   $curtemp = 70;
++	   $mintemp = 60;
++	   $maxtemp = 80;
++	   
++	   if(preg_match("|C|i",$WX['tempUnit'])) {
++		  $inUOM = 'C';
++	   } else {
++		  $inUOM = 'F';
++	   }
++	  if ($inUOM == 'F' and $UOM == 'C') {
++		$curtemp = FtoC($WX['outsideTemp'],1);
++		$mintemp = FtoC($WX['lowOutsideTemp'],1);
++		$maxtemp = FtoC($WX['hiOutsideTemp'],1);
++	  } elseif ($inUOM == 'C' and $UOM == 'F') {
++		$curtemp = CtoF($WX['outsideTemp'],1);
++		$mintemp = CtoF($WX['lowOutsideTemp'],1);
++		$maxtemp = CtoF($WX['hiOutsideTemp'],1);
++	  } elseif (isset($WX['outsideTemp'])) {
++		$curtemp = $WX['outsideTemp'];
++		$mintemp = $WX['lowOutsideTemp'];
++		$maxtemp = $WX['hiOutsideTemp'];
++		$UOM = $inUOM;
++	  }
++  } else { // get from WE_realtime.txt
++	 $dataraw = file_get_contents($WErealtime);
++	
++	 // clean up any blank lines
++	 $dataraw = trim($dataraw);
++	 $dataraw = preg_replace("/[\r\n]+/",'',$dataraw);
++	 $data = explode("|", $dataraw);
++	 if(preg_match("/C/i",$data[14])) {
++		 $inUOM = 'C';
++	 } else {
++		 $inUOM = 'F';
++	 }
++	 if ($inUOM == 'F' and $UOM == 'C') {
++			$curtemp = FtoC($data[2],1);
++			$mintemp = FtoC($data[28],1);
++			$maxtemp = FtoC($data[26],1);
++	 } elseif ($inUOM == 'C' and $UOM == 'F') {
++			$curtemp = CtoF($data[2],1);
++			$mintemp = CtoF($data[28],1);
++			$maxtemp = CtoF($data[26],1);
++	 } else {
++			$curtemp = $data[2];
++			$mintemp = $data[28];
++			$maxtemp = $data[26];
++			$UOM = $inUOM;
++	 }
++  
++  
++  
++  } // end get from WE_realtime.txt
++
++} // end weewx processing
++
++
+ 
+ if ($wxSoftware == 'WSN') { // Process WeatherSnoop (tags files only)
+ 		 global $WX,$SITE; 
+@@ -800,4 +867,4 @@ function autoscale($curtemp,$mintemp,$maxtemp) {
+ 
+ 
+ }
+-?>
+\ No newline at end of file
++?>
+diff --git a/wxgraphs.php b/wxgraphs.php
+index 90531c0..9fe1a52 100644
+--- a/wxgraphs.php
++++ b/wxgraphs.php
+@@ -381,6 +381,134 @@ print "</p>\n";
+     
+ <?php } // end wview graph names    ?>
+ 
++<?php if($SITE['WXsoftware'] == 'WE') { // weewx graph names
++  $WEgraphDescs = array(
++     'd' => 'Daily',
++	 'w' => 'Weekly',
++	 'm' => 'Monthly',
++	 'y' => 'Yearly',
++  );
++  $WEgraphPeriods = array(
++     'd' => '24h',
++	 'w' => '7d',
++	 'm' => '28d',
++	 'y' => '365d',
++  );
++
++$WEgraphs = array(
++ # 24h graphs
++ '24h-temp' => 'daytempdew.png',
++ '24h-intemp' => 'dayinside.png',
++ '24h-rx' => 'dayrx.png',
++ '24h-hc' => 'daytempchill.png',
++ #'24h-hum' => 'daytempdew.png',
++ '24h-baro' => 'daybarometer.png',
++ '24h-rain' => 'dayrain.png',
++ '24h-wdir' => 'daywinddir.png',
++ '24h-wsp' => 'daywind.png',
++ #'24h-rad' => 'radiationDay.png',
++ #'24h-uv' => 'UVDay.png',
++ 
++ # 7d graphs
++ '7d-temp' => 'weektempdew.png',
++ '7d-intemp' => 'weekinside.png',
++ '7d-rx' => 'weekrx.png',
++ '7d-hc' => 'weektempchill.png',
++ #'7d-hum' => 'weektempdew.png',
++ '7d-baro' => 'weekbarometer.png',
++ '7d-rain' => 'weekrain.png',
++ '7d-wdir' => 'weekwinddir.png',
++ '7d-wsp' => 'weekwind.png',
++ #'7d-rad' => 'radiationDay.png',
++ #'7d-uv' => 'UVDay.png',
++ 
++ # 28d graphs
++ '28d-temp' => 'monthtempdew.png',
++ '28d-intemp' => 'monthinside.png',
++ '28d-rx' => 'monthrx.png',
++ '28d-hc' => 'monthtempchill.png',
++ #'28d-hum' => 'monthtempdew.png',
++ '28d-baro' => 'monthbarometer.png',
++ '28d-rain' => 'monthrain.png',
++ '28d-wdir' => 'monthwinddir.png',
++ '28d-wsp' => 'monthwind.png',
++ #'28d-rad' => 'radiationDay.png',
++ #'28d-uv' => 'UVDay.png',
++ 
++ # 365d graphs
++ '365d-temp' => 'yeartempdew.png',
++ '365d-intemp' => 'yearinside.png',
++ '365d-rx' => 'yearrx.png',
++ '365d-hc' => 'yeartempchill.png',
++ #'365d-hum' => 'yeartempdew.png',
++ '365d-baro' => 'yearbarometer.png',
++ '365d-rain' => 'yearrain.png',
++ '365d-wdir' => 'yearwinddir.png',
++ '365d-wsp' => 'yearwind.png',
++ #'365d-rad' => 'radiationDay.png',
++ #'365d-uv' => 'UVDay.png',
++ 
++
++);
++
++$WEgraphIdx = 'w';  // default is 7-day set
++$WEgraphName = $WEgraphDescs[$WEgraphIdx];
++$WEgraphSet =  $WEgraphPeriods[$WEgraphIdx];
++
++
++if(isset($_REQUEST['graph'])) { // check out selection
++  $req = strtolower($_REQUEST['graph']);
++  foreach ($WEgraphDescs as $i => $v) {
++	  if ($req == $i) {
++		$WEgraphIdx = $i;  // default is 7-day set
++		$WEgraphName = $WEgraphDescs[$i];
++		$WEgraphSet =  $WEgraphPeriods[$i];
++		break;  
++	  }
++  }
++}
++// generate the links for the available periods to display
++print "<p style=\"text-align: center\">";
++foreach ($WEgraphDescs as $i => $v) {
++	if ($i == $WEgraphIdx) {
++		print "<strong>".langtransstr($v)."</strong>&nbsp;&nbsp;";
++	} else {
++		print "<a href=\"?graph=$i\">".langtransstr($v)."</a>&nbsp;&nbsp;";
++	}
++}
++print "</p>\n";	
++ ?>
++    <h2><?php echo langtransstr('Temperature') . ' - ' . langtransstr('Dew Point') . ' / ' . langtransstr('Wind Chill') . ' - ' .langtransstr('Heat Index'); ?></h2>
++	<?php genImageLink($WEgraphs[$WEgraphSet."-temp"],'Temperature'); ?>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-hc"],'Wind Chill'); ?>
++    <br />
++    <h2><?php echo langtransstr('Rain') . ' / ' . langtransstr('Barometer'); ?></h2>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-rain"],'Rain'); ?>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-baro"],'Barometer'); ?>
++    <br />
++    <h2><?php echo langtransstr('Wind'); ?></h2>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-wsp"],'Wind Speed'); ?>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-wdir"],'Wind Direction'); ?>
++    <br />
++        <?php // figure out to display solar and/or UV based on site settings
++	if($SITE['SOLAR'] and $SITE['UV']) { // have both sensors ?>
++    <h2><?php echo langtransstr('Solar Radiation') . ' / ' . langtransstr('UV Index'); ?></h2>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-rad"],'Solar Radiation'); ?>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-uv"],'UV Index'); ?>
++    <?php } elseif ($SITE['SOLAR']) { ?>
++     <h2><?php echo langtransstr('Solar Radiation'); ?></h2>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-rad"],'Solar Radiation'); ?>
++    <?php } elseif ($SITE['UV']) { ?>
++     <h2><?php echo langtransstr('UV Index'); ?></h2>
++    <?php genImageLink($WEgraphs[$WEgraphSet."-uv"],'UV Index'); ?>
++    <?php } // end solar/uv selection ?>
++     <h2><?php langtrans('ISS Signal Quality'); ?></h2>
++     <?php genImageLink($WEgraphs[$WEgraphSet."-rx"],'Signal Quality'); ?>
++
++    
++<?php } // end weewx graph names    ?>
++
++
+ 
+ </div><!-- end main-copy -->
+ 
+@@ -408,4 +536,4 @@ include("footer.php");
+ ############################################################################
+ # End of Page
+ ############################################################################
+-?>
+\ No newline at end of file
++?>
