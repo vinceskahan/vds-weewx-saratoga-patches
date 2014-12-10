@@ -28,5 +28,5 @@ Edits are initially to only the following files:
  - check-fetch-times.php (untested)
  - flyout-menu.xml
  - thermometer.php
- - wxgraphs.php
+ - Settings.php
 
