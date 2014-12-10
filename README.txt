@@ -21,3 +21,9 @@ installation, just with this patching step inserted.
  - edit your configurable information as needed
  - edit your look'n'feel as needed
 
+Edits are initially to only the following files:
+ - check-fetch-times.php (untested)
+ - flyout-menu.xml
+ - thermometer.php
+ - wxgraphs.php
+
