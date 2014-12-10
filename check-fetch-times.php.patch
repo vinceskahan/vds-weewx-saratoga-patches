@@ -1,0 +1,28 @@
+diff --git a/check-fetch-times.php b/check-fetch-times.php
+index 7c5e21b..2f7817d 100644
+--- a/check-fetch-times.php
++++ b/check-fetch-times.php
+@@ -171,6 +171,7 @@ if(isset($_REQUEST['show']) and strtolower($_REQUEST['show']) == 'info') {
+     'WL' => array('graphImageDir'=> 'OutsideTempHistory.gif','NOAACurDir'=>'NOAAMO.TXT'),
+ //	'WSN' => array('graphImageDir'=> '?????'),  // no graphs for WeatherSnoop
+ 	'WV'=> array('graphImageDir'=> 'tempdaycomp.png', 'NOAAdir'=> 'NOAA-yyyy.txt'),
++	'WE'=> array('graphImageDir'=> 'tempdaycomp.png', 'NOAAdir'=> 'NOAA-yyyy.txt'),
+ //	'WXS' => array('graphImageDir'=> '?????'),  // no graphs for WXSolution
+ 	
+   
+@@ -452,6 +453,8 @@ Base-Canada	wxtrends.php	2011-01-19 11:04 PST	2914	298	2842	ff4f1a25ebeb60a130b2
+ 	 'WSN' => array('WSNtags.php','WSN-defs.php'),
+ 	 'WV' => array('WV-defs.php','gen-WVtags.php','tags.txt',
+ 	  'include-NOAA-reports.php'),
++	 'WE' => array('WE-defs.php','gen-WEtags.php','tags.txt',
++	  'include-NOAA-reports.php'),
+ 	  
+ 	 'WXS' => array('WXS-defs.php','gen-WXStags.php','tags.txt'),
+ 	 
+@@ -1049,4 +1052,4 @@ function decode_permissions($perms) {
+ }
+ ?>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
