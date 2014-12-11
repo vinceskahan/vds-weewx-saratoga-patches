@@ -26,3 +26,12 @@ index 814a77f..ff1ceab 100644
 -</menu>
 \ No newline at end of file
 +</menu>
+@@ -61,7 +61,7 @@
+ 		<item wxonly="WCT" caption="Summary This Month" link="wxthismonth.php"/>
+ 		<item wxonly="WCT" caption="Summary Year over Year" link="wxyearoveryear.php"/>
+ 		<item wxonly="WD" caption="Station Monthly Reports" link="wxhistory.php"/>
+-		<item wxonly="CU,VWS,WL,WV" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
++		<item wxonly="CU,VWS,WL,WV,WV" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
+ 		<item caption="Sun/Moon Almanac" link="wxastronomy.php"/>
+ 		<item caption="Earthquake activity" link="wxquake.php"/>
+ 		<item caption="Nearby METAR Reports" link="wxmetar.php"/>
