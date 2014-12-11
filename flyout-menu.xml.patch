@@ -1,17 +1,8 @@
 diff --git a/flyout-menu.xml b/flyout-menu.xml
-index 814a77f..ff1ceab 100644
+index 814a77f..ca80e2d 100644
 --- a/flyout-menu.xml
 +++ b/flyout-menu.xml
-@@ -61,7 +61,7 @@
- 		<item wxonly="WCT" caption="Summary This Month" link="wxthismonth.php"/>
- 		<item wxonly="WCT" caption="Summary Year over Year" link="wxyearoveryear.php"/>
- 		<item wxonly="WD" caption="Station Monthly Reports" link="wxhistory.php"/>
--		<item wxonly="CU,VWS,WL,WV" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
-+		<item wxonly="CU,VWS,WL,WV,WE" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
- 		<item caption="Sun/Moon Almanac" link="wxastronomy.php"/>
- 		<item caption="Earthquake activity" link="wxquake.php"/>
- 		<item caption="Nearby METAR Reports" link="wxmetar.php"/>
-@@ -47,12 +47,14 @@
+@@ -47,19 +47,21 @@
  	<item caption="Forecast &amp;amp; Advisories" title="Weather outlook">
  		<item caption="Forecast details" link="wxforecast.php"/>
  		<item caption="Advisories" link="wxadvisory.php" />
@@ -28,6 +19,14 @@ index 814a77f..ff1ceab 100644
  		<item wxonly="WCT" caption="Station Records" link="wxstationrecords.php"/>
  		<item wxonly="WCT" caption="Station Journal" link="wxjournal.php"/>
  		<item wxonly="WCT" caption="Recent Weather Summary" link="wxrecent.php"/>
+ 		<item wxonly="WCT" caption="Summary This Month" link="wxthismonth.php"/>
+ 		<item wxonly="WCT" caption="Summary Year over Year" link="wxyearoveryear.php"/>
+ 		<item wxonly="WD" caption="Station Monthly Reports" link="wxhistory.php"/>
+-		<item wxonly="CU,VWS,WL,WV" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
++		<item wxonly="CU,VWS,WL,WV,WE" caption="NOAA reports" link="wxnoaaclimatereports.php"/>
+ 		<item caption="Sun/Moon Almanac" link="wxastronomy.php"/>
+ 		<item caption="Earthquake activity" link="wxquake.php"/>
+ 		<item caption="Nearby METAR Reports" link="wxmetar.php"/>
 @@ -74,4 +76,4 @@
  	<item caption="Contact" link="wxcontact.php"/>
   -->
